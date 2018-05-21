@@ -1,6 +1,8 @@
 package com.example.dev.southbrmemes.Presenter.Rest.Domain.Auth
 
 import android.app.Activity
+import android.support.design.widget.Snackbar
+import android.widget.Toast
 import com.example.dev.southbrmemes.Model.Entity.Meme
 import com.example.dev.southbrmemes.Model.Entity.User
 import com.example.dev.southbrmemes.Model.Infra.Entity.UserEntity
@@ -46,6 +48,7 @@ class UserLoginDomain(activity: Activity){
                             else
                                 _IUserRepository.insert(UserEntity(1,response.token!!))
 
+                            Toast.makeText(activity, "toque no icone do aplicativo, para ver os memes um por um", Toast.LENGTH_LONG).show()
                             ChangesActivity.changeActivityNoReturn(LoggedActivity::class.java, activity)
                         }
                     }

@@ -10,18 +10,21 @@ import retrofit2.http.*
  */
 interface IMeme {
 
-    @POST("")
+    @POST("meme/insert")
     fun insert(@Body meme: Meme, @Header("Authorization") token: String): Call<Return>
 
-    @PUT("")
+    @PUT("meme/update")
     fun update(@Body meme: Meme, @Header("Authorization") token: String): Call<Return>
 
-    @DELETE("")
+    @DELETE("meme/delete/{id}")
     fun delete(@Path("id") id: Int,@Header("Authorization") token: String): Call<Return>
 
-    @GET("")
+    @GET("meme/list")
     fun getMemes(): Call<List<Meme>>
 
-    @GET("")
+    @GET("meme/data")
+    fun data(): Call<Meme>
+
+    @GET("meme/mylist")
     fun getMyMemes(@Header("Authorization") token: String): Call<List<Meme>>
 }

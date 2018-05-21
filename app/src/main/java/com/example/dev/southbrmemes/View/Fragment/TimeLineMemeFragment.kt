@@ -4,15 +4,13 @@ package com.example.dev.southbrmemes.View.Fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.com.zellar.hooh.Views.Adapters.MemeAdapter
-import com.example.dev.southbrmemes.Model.Entity.Meme
 import com.example.dev.southbrmemes.Presenter.Rest.Domain.Reload.MemeListDomain
-
 import com.example.dev.southbrmemes.R
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.fragment_time_line.*
 
 
@@ -45,6 +43,12 @@ class TimeLineMemeFragment : Fragment() {
             refreshTimeLineMeme.isRefreshing = false
             MemeListDomain(activity!!).list(listTimeLineMeme)
         }
+
+        var adRequest = AdRequest.Builder()
+               // .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build()
+
+        adView.loadAd(adRequest)
     }
 
 }

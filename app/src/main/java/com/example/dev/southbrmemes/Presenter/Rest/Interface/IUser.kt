@@ -11,19 +11,19 @@ import retrofit2.http.*
  */
 interface IUser{
 
-    @GET("")
+    @GET("user/data")
     fun data(@Header("Authorization") token: String): Call<User>
 
-    @POST("")
+    @POST("user/login")
     fun login(@Body user:User ): Call<Return>
 
-    @POST("")
+    @POST("user/insert")
     fun insert(@Body user:User): Call<Return>
 
-    @PUT("")
+    @PUT("user/update")
     fun update(@Body user:User,@Header("Authorization") token: String): Call<Return>
 
-    @DELETE("")
+    @DELETE("user/delete")
     fun delete(@Header("Authorization") token: String): Call<Return>
 
 }

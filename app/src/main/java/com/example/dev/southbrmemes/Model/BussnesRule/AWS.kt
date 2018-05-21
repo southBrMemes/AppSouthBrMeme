@@ -27,13 +27,17 @@ import java.io.File
 
 class AWS {
 
+    companion object {
+        val URL = "https://bucketeer-acabba4c-461f-43ff-a3e7-a2db464195a2.s3.amazonaws.com/public/"
+    }
+
     private val access = ""
     private val secret = ""
     private val bucket = ""
     private val service: ObjectService
     private val callAccessGallery: SavePhotoGallery
 
-    private val myFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/Snacktime")
+    private val myFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/SouthBrMeme")
     private var file: File? = null
 
     init {

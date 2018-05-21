@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.example.dev.southbrmemes.Model.BussnesRule.AWS
 import com.example.dev.southbrmemes.Model.Entity.Meme
 import com.example.dev.southbrmemes.Presenter.RecyclerView.ViewHolder.MemeViewHolder
 import com.example.dev.southbrmemes.R
+import com.squareup.picasso.Picasso
 
 
 /**
@@ -17,11 +19,9 @@ import com.example.dev.southbrmemes.R
 class MemeAdapter(context: Activity, itensMemes: List<Meme>) : RecyclerView.Adapter<MemeViewHolder>() {
 
     private var _context = context
-    private var _aws: AWS
     private var _itensMemes: List<Meme>
 
     init {
-        this._aws = AWS()
         this._itensMemes = itensMemes
     }
 
@@ -36,7 +36,12 @@ class MemeAdapter(context: Activity, itensMemes: List<Meme>) : RecyclerView.Adap
         var item = getItem(position)
 
         holder.name.setText(item.name)
-        _aws.download(_context, item.url, holder.imgMeme)
+
+        Picasso.get().
+                load("${AWS.URL}${item?.url}")
+                .into(holder.imgMeme);
+        holder.imgMeme.setScaleType(ImageView.ScaleType.FIT_XY)
+
         holder.commit.setText(item.commit)
     }
 

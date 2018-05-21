@@ -76,7 +76,7 @@ class AccessGalleryOfPhoto{
 
     fun filename(): String {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        return "SnackTime_$timeStamp.jpg"
+        return "SouthBrMeme_$timeStamp.jpg"
     }
 
     fun permissionGallery(requestCode: Int, grantResults: IntArray, PERMISSAO_REQUEST: Int) {

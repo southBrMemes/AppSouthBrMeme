@@ -27,7 +27,7 @@ class MemeInsertDomain(activity: Activity) {
 
                         Message.messageReturn(response.answerText!!, activity)
 
-                        PopUpRegisterMeme(activity).creatPopUp()
+                        PopUpRegisterMeme(activity).creatPopUpMenu()
                     }
 
                 } else {

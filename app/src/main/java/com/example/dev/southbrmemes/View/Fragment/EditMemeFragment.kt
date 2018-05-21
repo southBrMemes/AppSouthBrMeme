@@ -2,11 +2,14 @@ package com.example.dev.southbrmemes.View.Fragment
 
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +17,11 @@ import android.widget.ImageView
 import com.example.dev.southbrmemes.Model.BussnesRule.*
 import com.example.dev.southbrmemes.Presenter.Message.Message
 import com.example.dev.southbrmemes.Presenter.Rest.Domain.Delete.MemeDeleteDomain
+import com.example.dev.southbrmemes.Presenter.Rest.Domain.Update.MemeUpdateDomain
 import com.example.dev.southbrmemes.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_edit_meme.*
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -35,7 +41,6 @@ class EditMemeFragment : Fragment() {
 
     private var rotation = 0
 
-    private var aws: AWS? = null
     private var acessPhoto: AccessGalleryOfPhoto? = null
     private var acessSavePhotoGallery: SavePhotoGallery? = null
     private var acessPhotoCamera: AccessPhoto? = null
@@ -59,8 +64,6 @@ class EditMemeFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar!!.setTitle("Editar Meme")
         (activity as AppCompatActivity).supportActionBar!!.setIcon(null)
 
-
-        aws = AWS()
         acessSavePhotoGallery = SavePhotoGallery()
         acessPhotoCamera = AccessPhoto()
         acessPhoto = AccessGalleryOfPhoto()
@@ -81,9 +84,11 @@ class EditMemeFragment : Fragment() {
             id = args!!.getInt("id")
             commit = args!!.getString("commit")
 
-            aws?.let {
-                it.download(activity!!, args?.getString("url"), imagOfPost!!)
-            }
+
+            Picasso.get()
+                    .load("${AWS.URL}${args?.getString("url")}")
+                    .into(imagOfPost)
+            imagOfPost?.setScaleType(ImageView.ScaleType.FIT_XY)
 
             editTextCommitMeme.setText(commit)
         }
@@ -124,11 +129,22 @@ class EditMemeFragment : Fragment() {
         }
 
         btnEditMeme.setOnClickListener { v ->
-            if (ValidateComponent.validadeRegisterMeme(archive, editTextCommitMeme))
-                aws!!.uploadImgUpdateMeme(activity!!, id, "SouthBRMeme" + System.currentTimeMillis() + ".jpg", editTextCommitMeme.text.toString(), archive!!, v)
+            if (ValidateComponent.validadeRegisterMeme(archive, editTextCommitMeme)) {
+
+
+                val bitmap = BitmapFactory.decodeFile(archive?.absolutePath)
+                val bytes = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes);
+                val b = bytes.toByteArray()
+                val encodedfile = android.util.Base64.encodeToString(b, Base64.DEFAULT)
+
+                MemeUpdateDomain(activity!!).update(id,encodedfile,editTextCommitMeme.text.toString())
+
+                //aws!!.uploadImgUpdateMeme(activity!!, id, "SouthBRMeme" + System.currentTimeMillis() + ".jpg", editTextCommitMeme.text.toString(), archive!!, v)
+            }
         }
 
-        btnDeleteMeme.setOnClickListener{ v ->
+        btnDeleteMeme.setOnClickListener { v ->
             MemeDeleteDomain(activity!!).delete(id)
         }
     }

@@ -7,19 +7,27 @@ import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import com.example.dev.southbrmemes.Model.BussnesRule.*
 import com.example.dev.southbrmemes.Presenter.Message.Message
+import com.example.dev.southbrmemes.Presenter.Rest.Domain.Insert.MemeInsertDomain
 import com.example.dev.southbrmemes.R
-import kotlinx.android.synthetic.main.fragment_edit_meme.*
 import kotlinx.android.synthetic.main.fragment_register_meme.*
 import java.io.File
+import java.io.ByteArrayOutputStream
+import java.util.*
+import android.R.attr.data
+import android.support.v4.app.NotificationCompat.getExtras
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+
+
+
+
 
 
 /**
@@ -28,7 +36,7 @@ import java.io.File
 class RegisterMemeFragment : Fragment() {
 
     companion object {
-        fun getInstance(): RegisterMemeFragment{
+        fun getInstance(): RegisterMemeFragment {
             return RegisterMemeFragment();
         }
     }
@@ -107,9 +115,18 @@ class RegisterMemeFragment : Fragment() {
             }
         }
 
-        btnRegisterMeme.setOnClickListener{ v ->
-            if (ValidateComponent.validadeRegisterMeme(archive,editTextRegisterCommitMeme))
-                aws!!.uploadImgMeme(activity!!,"SouthBRMeme" + System.currentTimeMillis() + ".jpg",editTextRegisterCommitMeme.text.toString(),archive!!,v)
+        btnRegisterMeme.setOnClickListener { v ->
+            if (ValidateComponent.validadeRegisterMeme(archive, editTextRegisterCommitMeme)) {
+
+                val bitmap = BitmapFactory.decodeFile(archive?.absolutePath)
+                val bytes = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes);
+                val b = bytes.toByteArray()
+                val encodedfile = android.util.Base64.encodeToString(b, Base64.DEFAULT)
+
+                MemeInsertDomain(activity!!).insert(encodedfile,editTextRegisterCommitMeme.text.toString())
+                //aws!!.uploadImgMeme(activity!!,"SouthBRMeme" + System.currentTimeMillis() + ".jpg",editTextRegisterCommitMeme.text.toString(),archive!!,v)
+            }
         }
     }
 
@@ -120,9 +137,9 @@ class RegisterMemeFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val filePhotoGallery:File? = acessPhoto!!.accessGallery(requestCode, resultCode, data, imagOfPost!!, activity!!)
+        val filePhotoGallery: File? = acessPhoto!!.accessGallery(requestCode, resultCode, data, imagOfPost!!, activity!!)
 
-        val filePhotoCamera:File? = acessPhotoCamera!!.accessPhoto(requestCode, resultCode, data, CAMERA, imagOfPost!!, activity!!)
+        val filePhotoCamera: File? = acessPhotoCamera!!.accessPhoto(requestCode, resultCode, data, CAMERA, imagOfPost!!, activity!!)
 
         if (filePhotoGallery != null) {
             rotation = 1

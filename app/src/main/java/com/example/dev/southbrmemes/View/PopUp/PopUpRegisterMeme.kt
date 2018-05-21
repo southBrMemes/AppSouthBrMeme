@@ -5,7 +5,12 @@ import android.app.AlertDialog
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.dev.southbrmemes.Presenter.Rest.Domain.Data.MemeDataDomain
 import com.example.dev.southbrmemes.R
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
+import kotlinx.android.synthetic.main.fragment_time_line.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -20,40 +25,42 @@ class PopUpRegisterMeme(activity: Activity) {
         _activity = activity
     }
 
-    fun creatPopUp(){
+    fun creatPopUpMenu() {
         var dialog = AlertDialog.Builder(_activity).create()
 
-        var view: View = _activity.getLayoutInflater().inflate(R.layout.pop_up_register_meme, null)
+        var view: View = _activity.getLayoutInflater().inflate(R.layout.pop_up_menu_meme, null)
         dialog.setView(view)
 
-        var listImg = ArrayList<Int>()
-        listImg.add(R.drawable.gerador01)
-        listImg.add(R.drawable.gerador02)
-        listImg.add(R.drawable.gerador03)
-        listImg.add(R.drawable.gerador04)
-        listImg.add(R.drawable.gerador05)
-        listImg.add(R.drawable.gerador07)
-        listImg.add(R.drawable.gerador08)
-        listImg.add(R.drawable.gerador09)
-        listImg.add(R.drawable.gerador10)
-        listImg.add(R.drawable.gerador11)
-        listImg.add(R.drawable.gerador12)
-        listImg.add(R.drawable.gerador13)
-        listImg.add(R.drawable.gerador14)
 
         var imgMeme: ImageView = view.findViewById(R.id.imgPopUpRegisterMeme)
 
-        var random = Random()
-        imgMeme.setBackgroundResource(listImg.get(random.nextInt(listImg.size)))
-
         var btnPopUpOk: TextView = view.findViewById(R.id.textViewConfirmRegisterPopUp)
 
+        var name: TextView = view.findViewById(R.id.textViewNomeRegisterMeme)
+
+        var btnPopUpRefrash: TextView = view.findViewById(R.id.textViewRefreshRegisterPopUp)
+
+        var adView: AdView = view.findViewById(R.id.adView1)
+
+        var adRequest = AdRequest.Builder()
+                //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build()
+
+        adView.loadAd(adRequest)
+
         if (!_activity.isFinishing()) {
+            dialog.setCanceledOnTouchOutside(false)
             dialog.show()
+
+            MemeDataDomain(activity = _activity).data(imgMeme, name)
         }
 
-        btnPopUpOk.setOnClickListener{ v ->
+        btnPopUpOk.setOnClickListener { v ->
             dialog.dismiss()
+        }
+
+        btnPopUpRefrash.setOnClickListener { v ->
+            MemeDataDomain(activity = _activity).data(imgMeme, name)
         }
     }
 }

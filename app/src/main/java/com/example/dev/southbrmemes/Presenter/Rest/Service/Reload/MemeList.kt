@@ -19,7 +19,7 @@ object MemeList{
                failure: (throwable: Throwable) -> Unit) {
 
         var objectService = ObjectService()
-        objectService.getDialog(activity,"Carregando memes")
+        objectService.getDialog(activity,"Carregando meme")
 
         val retrofit = Retrofit.Builder()
                 .baseUrl(URL.WEB_SERVICE)

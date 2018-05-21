@@ -24,6 +24,10 @@
                 android:id="@+id/nav_term"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Termo" />
+            <item
+                android:id="@+id/nav_app"
+                android:icon="@drawable/ic_apps_black_24dp"
+                android:title="Nosso Aplicativos" />
         </menu>
     </item>
 

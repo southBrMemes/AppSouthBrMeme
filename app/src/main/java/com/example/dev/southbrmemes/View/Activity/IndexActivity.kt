@@ -1,29 +1,37 @@
 package com.example.dev.southbrmemes.View.Activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
-import android.os.Message
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import com.example.dev.southbrmemes.Model.Infra.Repository.UserRepository.IUserRepository
 import com.example.dev.southbrmemes.Model.Infra.Repository.UserRepository.UserRepository
-import com.example.dev.southbrmemes.Model.Session.SessionManager
 import com.example.dev.southbrmemes.Presenter.ChangesScreen.ChangesActivity
 import com.example.dev.southbrmemes.R
 import com.example.dev.southbrmemes.View.Fragment.LoginFragment
 import com.example.dev.southbrmemes.View.Fragment.TermFragment
 import com.example.dev.southbrmemes.View.Fragment.TimeLineMemeFragment
+import com.example.dev.southbrmemes.View.PopUp.PopUpRegisterMeme
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.activity_index.*
-import kotlinx.android.synthetic.main.app_bar_index.*
 import kotlinx.android.synthetic.main.content_index.*
+
 
 class IndexActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private lateinit var timeLineMemeFragment : TimeLineMemeFragment
+    private lateinit var timeLineMemeFragment: TimeLineMemeFragment
     private lateinit var loginFragment: LoginFragment
     private lateinit var termFragment: TermFragment
     private lateinit var _IUserRepository: IUserRepository
@@ -31,21 +39,31 @@ class IndexActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_index)
+
+        var toolbar = findViewById<View>(R.id.toolbar) as android.support.v7.widget.Toolbar
         setSupportActionBar(toolbar)
+
+        MobileAds.initialize(this, "ca-app-pub-6530429566946986~2014950797")
+
+        toolbar?.setOnClickListener {
+            PopUpRegisterMeme(activity = this).creatPopUpMenu()
+        }
 
         _IUserRepository = UserRepository(this)
 
-        timeLineMemeFragment  = TimeLineMemeFragment.getInstance()
+        if (_IUserRepository.buscarToken() != null)
+            ChangesActivity.changeActivity(LoggedActivity::class.java, this)
+
+
+        timeLineMemeFragment = TimeLineMemeFragment.getInstance()
         loginFragment = LoginFragment.getInstance()
         termFragment = TermFragment.getInstance()
 
-        if(_IUserRepository.buscarToken() != null)
-            ChangesActivity.changeActivity(LoggedActivity::class.java,this)
 
         if (savedInstanceState == null)
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.flIndex, timeLineMemeFragment , null)
+                    .replace(R.id.flIndex, timeLineMemeFragment, null)
                     .commit()
 
         val toggle = ActionBarDrawerToggle(
@@ -54,6 +72,8 @@ class IndexActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+
     }
 
     override fun onBackPressed() {
@@ -84,7 +104,7 @@ class IndexActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         // Handle navigation view item clicks here.
         when (item.itemId) {
             R.id.nav_home -> {
-                chengefragment(timeLineMemeFragment , flIndex.id)
+                chengefragment(timeLineMemeFragment, flIndex.id)
             }
             R.id.nav_login -> {
                 chengefragment(loginFragment, flIndex.id)
@@ -94,6 +114,9 @@ class IndexActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
             }
             R.id.nav_term -> {
                 chengefragment(termFragment, flIndex.id)
+            }
+            R.id.nav_app -> {
+                myApps("https://play.google.com/store/apps/developer?id=SnackTime")
             }
         }
 
@@ -109,10 +132,46 @@ class IndexActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 .commit()
     }
 
+
     fun share() {
+        val appPackageName = packageName
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, "faça parte do snacktime torne seu negocio mais amplo https://play.google.com/store/apps/details?id=com.wolfdeveloper.snacktimevendedor")
-        startActivity(intent)
+        try {
+            intent.putExtra(Intent.EXTRA_TEXT, "conheça o south br memes https://play.google.com/store/apps/details?id=$appPackageName")
+            startActivity(intent)
+        } catch (e: Exception) {
+        }
+    }
+
+
+    fun myApps(url: String) {
+        var i: Intent = Intent(android.content.Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        aksCheckedPermissions()
+    }
+
+    public fun aksCheckedPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            askForPermissions()
+
+        }
+    }
+
+    private fun askForPermissions() {
+        ActivityCompat.requestPermissions(this,
+                arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                7)
     }
 }

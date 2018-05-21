@@ -34,14 +34,14 @@ class SavePhotoGallery {
     fun createFile(): File {
         this.fileName = filename()
         val pasta = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES + "/Snacktime")
+                Environment.DIRECTORY_PICTURES + "/SouthBrMeme")
         return File(pasta.path + "/"
                 + fileName)
     }
 
     fun filename(): String {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        return "SnackTime_$timeStamp.jpg"
+        return "SouthBrMeme_$timeStamp.jpg"
     }
 
     fun recordPhoto(requestCode: Int, resultCode: Int, Tirar_Foto: Int, activity: Activity, imageView: ImageView, arquivoFoto: File, camera: Int) {

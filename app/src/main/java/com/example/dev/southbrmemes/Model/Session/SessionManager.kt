@@ -10,10 +10,10 @@ import android.preference.PreferenceManager
 class SessionManager(private val context: Context){
 
     companion object{
-        val TOKEN = "";
+        val TOKEN = "TOKEMSOUTH";
     }
 
-    private val PREFERENCES = "";
+    private val PREFERENCES = "MEMESSOUHTBR";
 
     fun setPreferences(key: String, value: String) {
         val sharedPreferences = this.context.getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
