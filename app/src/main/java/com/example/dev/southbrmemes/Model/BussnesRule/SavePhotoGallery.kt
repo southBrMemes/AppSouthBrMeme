@@ -12,6 +12,8 @@ import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.widget.ImageView
+import com.example.dev.southbrmemes.Model.Entity.Return
+import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -35,6 +37,7 @@ class SavePhotoGallery {
         this.fileName = filename()
         val pasta = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES + "/SouthBrMeme")
+        pasta.mkdir()
         return File(pasta.path + "/"
                 + fileName)
     }

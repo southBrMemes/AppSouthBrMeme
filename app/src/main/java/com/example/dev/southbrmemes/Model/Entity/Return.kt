@@ -7,5 +7,6 @@ class Return(
     var id:Int = 0,
     var token:String?,
     var answer:Boolean = false,
-    var answerText:String?
+    var answerText:String?,
+    var image:ByteArray?
     )

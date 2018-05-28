@@ -15,10 +15,13 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Created by dev on 13/05/2018.
  */
 object MemeList{
-    fun getMeme(activity: Activity, success: (note: Response<List<Meme>?>) -> Unit,
+    fun getMeme(load:Boolean = true,activity: Activity, success: (note: Response<List<Meme>?>) -> Unit,
                failure: (throwable: Throwable) -> Unit) {
 
-        var objectService = ObjectService()
+
+        val objectService = ObjectService()
+
+        if(load)
         objectService.getDialog(activity,"Carregando meme")
 
         val retrofit = Retrofit.Builder()

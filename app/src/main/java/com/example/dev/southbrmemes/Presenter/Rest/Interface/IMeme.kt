@@ -25,6 +25,9 @@ interface IMeme {
     @GET("meme/data")
     fun data(): Call<Meme>
 
+    @GET("meme/download/{id}")
+    fun download(@Path("id") id: Int): Call<Return>
+
     @GET("meme/mylist")
     fun getMyMemes(@Header("Authorization") token: String): Call<List<Meme>>
 }

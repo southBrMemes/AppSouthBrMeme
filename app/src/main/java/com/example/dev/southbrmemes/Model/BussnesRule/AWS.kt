@@ -33,7 +33,7 @@ class AWS {
 
     private val access = ""
     private val secret = ""
-    private val bucket = ""
+    private val bucket = "https://bucketeer-acabba4c-461f-43ff-a3e7-a2db464195a2.s3.amazonaws.com/public"
     private val service: ObjectService
     private val callAccessGallery: SavePhotoGallery
 
@@ -66,20 +66,15 @@ class AWS {
     }
 
 
-    fun download(activity: Activity, key: String?, imageView: ImageView) {
+    fun download(activity: Activity, key: String?) {
         if (callAccessGallery.permissionAccess(activity, 12)) {
-
             if (key != null) {
                 this.file = File(myFile.toString() + "/" + key)
                 if (!this.file!!.exists()) {
                     val thread = Thread(Runnable {
-                        downloadImg(activity, this.file, key, imageView)
+                        downloadImg(activity, this.file, key)
                     })
                     thread.start()
-                } else {
-                    val bitmap = BitmapFactory.decodeFile(this.file?.getAbsolutePath())
-                    imageView.setImageBitmap(bitmap)
-                    imageView.scaleType = ImageView.ScaleType.FIT_XY
                 }
             }
         } else {
@@ -138,28 +133,29 @@ class AWS {
         })
     }
 
-    private fun downloadImg(activity: Activity, file: File?, key: String?, imageView: ImageView) {
+    private fun downloadImg(activity: Activity, file: File?, key: String?) {
         val credentials = BasicAWSCredentials(this.access, this.secret)
         val s3Client = AmazonS3Client(credentials)
         s3Client.setRegion(com.amazonaws.regions.Region.getRegion(Regions.US_EAST_1))
         val transferUtility = TransferUtility(s3Client, activity)
+
         val transferObserver = transferUtility.download(this.bucket, key, file)
         transferObserver.setTransferListener(object : TransferListener {
             override fun onStateChanged(id: Int, state: TransferState) {
                 if (state == TransferState.COMPLETED) {
-                    val bitmap = BitmapFactory.decodeFile(file!!.absolutePath)
 
-                    imageView.setImageBitmap(bitmap)
-                    imageView.scaleType = ImageView.ScaleType.FIT_XY
+                    Message.messageReturn("Download realizado com sucesso", activity)
                 }
 
                 if (state == TransferState.FAILED) {
+                    Message.messageReturn("Falha ao realizar o Download", activity)
                 }
             }
 
             override fun onProgressChanged(id: Int, bytesCurrent: Long, bytesTotal: Long) {}
 
             override fun onError(id: Int, ex: Exception) {
+                Message.messageReturn("Erro ao realizar o Download", activity)
             }
         })
     }
