@@ -10,6 +10,6 @@ import com.example.dev.southbrmemes.Model.Infra.Entity.UserEntity
 @Dao
 abstract class UserDAO : IDao<UserEntity>() {
 
-    @Query("SELECT * FROM USER WHERE ID = 1")
+    @Query("")
     abstract fun buscarToken(): UserEntity?
 }

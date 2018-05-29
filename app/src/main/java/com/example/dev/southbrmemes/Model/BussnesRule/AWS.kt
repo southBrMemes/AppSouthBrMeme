@@ -28,12 +28,12 @@ import java.io.File
 class AWS {
 
     companion object {
-        val URL = "https://bucketeer-acabba4c-461f-43ff-a3e7-a2db464195a2.s3.amazonaws.com/public/"
+        val URL = ""
     }
 
     private val access = ""
     private val secret = ""
-    private val bucket = "https://bucketeer-acabba4c-461f-43ff-a3e7-a2db464195a2.s3.amazonaws.com/public"
+    private val bucket = ""
     private val service: ObjectService
     private val callAccessGallery: SavePhotoGallery
 

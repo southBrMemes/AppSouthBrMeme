@@ -7,12 +7,12 @@ import android.arch.persistence.room.PrimaryKey
 /**
  * Created by dev on 13/05/2018.
  */
-@Entity(tableName = "USER")
+@Entity(tableName = "")
 data class UserEntity(
         @PrimaryKey(autoGenerate = true)
-        @ColumnInfo(name = "ID")
+        @ColumnInfo(name = "")
         var id: Int = 0,
 
-        @ColumnInfo(name = "TOKEN")
+        @ColumnInfo(name = "")
         var token: String = ""
 )
